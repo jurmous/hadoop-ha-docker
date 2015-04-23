@@ -1,6 +1,6 @@
 <configuration>
-     <property>
-         <name>fs.default.name</name>
-         <value>hdfs://HOSTNAME:8020</value>
-     </property>
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://CLUSTER_NAME</value>
+  </property>
 </configuration>

@@ -26,13 +26,16 @@ RUN sed -i '/^export HADOOP_CONF_DIR/ s:.*:export HADOOP_CONF_DIR=/usr/local/had
 
 RUN chmod +x /usr/local/hadoop/etc/hadoop/*-env.sh
 
-RUN mkdir /home/hadoop && mkdir /home/hadoop/dfs && mkdir /home/hadoop/dfs/name && mkdir /home/hadoop/dfs/data
+RUN mkdir /home/hadoop && mkdir /home/hadoop/dfs && mkdir /home/hadoop/dfs/name && mkdir /home/hadoop/dfs/data && mkdir /home/hadoop/journal && mkdir /home/hadoop/journal/data
 
 ADD core-site.xml.template /usr/local/hadoop/etc/hadoop/core-site.xml.template
-ADD hdfs-site.xml /usr/local/hadoop/etc/hadoop/hdfs-site.xml
+ADD hdfs-site.xml.template /usr/local/hadoop/etc/hadoop/hdfs-site.xml.template
 
 ADD bootstrap.sh /etc/bootstrap.sh
 RUN chown root:root /etc/bootstrap.sh && chmod a+x /etc/bootstrap.sh
+
+ADD fence.sh /etc/fence.sh
+RUN chown root:root /etc/fence.sh && chmod a+x /etc/fence.sh
 
 CMD ["/etc/bootstrap.sh", "-d"]
 
