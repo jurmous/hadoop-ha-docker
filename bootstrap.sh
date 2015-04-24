@@ -22,6 +22,11 @@ checkArg () {
 
 $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh
 
+if [ -z $CLUSTER_NAME ]; then
+  CLUSTER_NAME="cluster"
+  export CLUSTER_NAME
+fi
+
 checkArg $@
 shift $shift
 
@@ -32,11 +37,6 @@ if [[ -z $1 ]]; then
 else
   server=$1
   shift 1
-fi
-
-if [ -z $CLUSTER_NAME ]; then
-  CLUSTER_NAME="cluster"
-  export CLUSTER_NAME
 fi
 
 if [ -z $NNODE1_IP ] || [ -z $NNODE2_IP ] || [ -z $JN_IPS ]; then
@@ -61,6 +61,17 @@ sed s/CLUSTER_NAME/$CLUSTER_NAME/ /usr/local/hadoop/etc/hadoop/hdfs-site.xml.tem
 > /usr/local/hadoop/etc/hadoop/hdfs-site.xml
 
 sed s/CLUSTER_NAME/$CLUSTER_NAME/ /usr/local/hadoop/etc/hadoop/core-site.xml.template > /usr/local/hadoop/etc/hadoop/core-site.xml
+
+if [[ $server = "format" ]]; then
+  read -p "Are you sure to format the hdfs volume? " -n 1 -r
+  echo  
+  if [[ $REPLY =~ ^[Yy]$ ]]
+  then
+    $HADOOP_PREFIX/bin/hadoop namenode -format
+    exit;
+  fi
+  exit;
+fi
 
 echo $HADOOP_PREFIX/sbin/hadoop-daemon.sh start $server $@
 

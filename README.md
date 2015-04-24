@@ -54,9 +54,10 @@ Example to link storage for the NameNode:
 ``` -v $NAMENODE_FOLDER_ON_HOST:/home/hadoop/dfs/name```
 
 # Formatting HDFS
-For first time use it is needed to format the NameNode. This can be done with the following command on the machines that host the NameNode:
+For first time use it is needed to format the NameNode and you can start it with the ```format``` keyword. In HA mode it is needed to supply the addresses of the quorum and the NameNodes. You need to run docker with the -it command to see the "Are you sure" question. This can be done with the following command on the machines that host the NameNode:
 
-```docker run -it -v $NAMENODE_FOLDER_ON_HOST:/home/hadoop/dfs/name jurmous/hadoop /usr/local/hadoop/bin/hadoop namenode -format```
+Example:
+```docker run -it -e "NNODE1_IP=$NNODE1_IP" -e "NNODE2_IP=$NNODE2_IP" -e "JN_IPS=jn1,jn2,jn3" -v /home/core/hadoop/logs/:/usr/local/hadoop/logs/ -v  $NAMENODE_FOLDER_ON_HOST:/home/hadoop/dfs/name jurmous/hadoop /etc/bootstrap.sh format```
 
 # Fencing
 In certain situations the NameNodes need to fence for a proper failover. Now the Fence will always return true without doing anything. Replace ```/etc/fence.sh`` with a docker volume attach for your own fencing algorithm. Probably something like a call to your docker scheduler to close down the other NameNode.
