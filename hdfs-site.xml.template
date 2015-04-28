@@ -35,7 +35,7 @@
     </property>
     <property>
       <name>dfs.namenode.shared.edits.dir</name>
-      <value>qjournal://JNODES:8485/CLUSTER_NAME</value>
+      <value>qjournal://JNODES/CLUSTER_NAME</value>
     </property>
     <property>
       <name>dfs.client.failover.proxy.provider.mycluster</name>

@@ -54,13 +54,15 @@ do
     JNODES+="$x:8485"
 done
 
-sed s/CLUSTER_NAME/$CLUSTER_NAME/ /usr/local/hadoop/etc/hadoop/hdfs-site.xml.template \
-| sed s/NNODE1_IP/$NNODE1_IP/ \
-| sed s/NNODE2_IP/$NNODE2_IP/ \
-| sed s/JNODES/$JNODES/ \
+sed "s/CLUSTER_NAME/$CLUSTER_NAME/" /usr/local/hadoop/etc/hadoop/hdfs-site.xml.template \
+| sed "s/NNODE1_IP/$NNODE1_IP/" \
+| sed "s/NNODE2_IP/$NNODE2_IP/" \
+| sed "s/JNODES/$JNODES/" \
 > /usr/local/hadoop/etc/hadoop/hdfs-site.xml
 
-sed s/CLUSTER_NAME/$CLUSTER_NAME/ /usr/local/hadoop/etc/hadoop/core-site.xml.template > /usr/local/hadoop/etc/hadoop/core-site.xml
+echo CLUSTER_NAME=$CLUSTER_NAME NNODE1_IP=$NNODE1_IP NNODE2_IP=$NNODE2_IP JNODES=$JNODES
+
+sed "s/CLUSTER_NAME/$CLUSTER_NAME/" /usr/local/hadoop/etc/hadoop/core-site.xml.template > /usr/local/hadoop/etc/hadoop/core-site.xml
 
 if [[ $server = "format" ]]; then
   read -p "Are you sure to format the hdfs volume? " -n 1 -r
