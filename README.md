@@ -21,7 +21,7 @@ Needed services for a cluster:
 It is probably wise to do all setup with a scheduler and some helpers to obtain the addresses of the Nodes as they come online. You could use Fleet or Kubernetes for this. Make sure the namenodes are at least always attached to the same storage for persistence.
 
 Run example to start the namenode:
-``` docker run -it -e "NNODE1_IP=nn1" -e "NNODE2_IP=nn2" -e "JN_IPS=j1,j2,j3" -v $NAMENODE_FOLDER_ON_HOST:/home/hadoop/dfs/name jurmous/hadoop /etc/bootstrap.sh -d namenode ```
+``` docker run -it -e "NNODE1_IP=nn1" -e "NNODE2_IP=nn2" -e "JN_IPS=j1,j2,j3" -v $NAMENODE_FOLDER_ON_HOST:/mnt/hadoop/dfs/name jurmous/hadoop /etc/bootstrap.sh -d namenode ```
 
 The bootstrap is needed to setup all the configuration.
 The parameters after /etc/bootstrap.sh  are given to ```hadoop-daemon.sh start```.  There are some extra parameters like -d described in next section.
@@ -45,19 +45,26 @@ Example part to set environment variables. Add this to the docker run command:
 ## Storage
 Link folders to the following folders for permanent storage:
 
-* ```/home/hadoop/dfs/name``` - For NameNode storage
-* ```/home/hadoop/dfs/data``` - For DataNode storage
-* ```/home/hadoop/journal/data``` - For Journal storage
+* ```/mnt/hadoop/dfs/name``` - For NameNode storage
+* ```/mnt/hadoop/dfs/data``` - For DataNode storage
+* ```/mnt/hadoop/journal/data``` - For Journal storage
 * ```/usr/local/hadoop/logs/``` - For the logs. You can also replace the ```/usr/local/hadoop/etc/log4j.properties``` with an attach docker volume to that file to customize the logging settings
 
 Example to link storage for the NameNode:
-``` -v $NAMENODE_FOLDER_ON_HOST:/home/hadoop/dfs/name```
+``` -v $NAMENODE_FOLDER_ON_HOST:/mnt/hadoop/dfs/name```
 
 # Formatting HDFS
-For first time use it is needed to format the NameNode and you can start it with the ```format``` keyword. In HA mode it is needed to supply the addresses of the quorum and the NameNodes. You need to run docker with the -it command to see the "Are you sure" question. This can be done with the following command on the machines that host the NameNode:
+For first time use it is needed to format HDFS by formatting the NameNode and sync the second namenode. It is needed to start all the journalnodes and both namenodes in docker with the correct volume and environment settings. Then you can use bash to get into the namenodes to do the formatting.
 
-Example:
-```docker run -it -e "NNODE1_IP=$NNODE1_IP" -e "NNODE2_IP=$NNODE2_IP" -e "JN_IPS=jn1,jn2,jn3" -v /home/core/hadoop/logs/:/usr/local/hadoop/logs/ -v  $NAMENODE_FOLDER_ON_HOST:/home/hadoop/dfs/name jurmous/hadoop /etc/bootstrap.sh format```
+## NameNode 1
+* Named hadoop-nn1 in this example. Create a bash prompt: ```docker exec -it hadoop-nn1 bash```
+* Run the format command. ```$HADOOP_PREFIX/bin/hdfs namenode -format```
+* Kill and start NameNode1 container again.
+
+## NameNode 2
+* Named hadoop-nn2 in this example. Create a bash prompt: ```docker exec -it hadoop-nn2 bash```
+* Run the format command. ```$HADOOP_PREFIX/bin/hdfs namenode -bootstrapStandby```
+* Kill and start NameNode2 container again.
 
 # Fencing
 In certain situations the NameNodes need to fence for a proper failover. Now the Fence will always return true without doing anything. Replace ```/etc/fence.sh`` with a docker volume attach for your own fencing algorithm. Probably something like a call to your docker scheduler to close down the other NameNode.
