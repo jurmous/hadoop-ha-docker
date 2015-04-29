@@ -26,7 +26,7 @@ RUN sed -i '/^export HADOOP_CONF_DIR/ s:.*:export HADOOP_CONF_DIR=/usr/local/had
 
 RUN chmod +x /usr/local/hadoop/etc/hadoop/*-env.sh
 
-RUN mkdir /home/hadoop && mkdir /home/hadoop/dfs && mkdir /home/hadoop/dfs/name && mkdir /home/hadoop/dfs/data && mkdir /home/hadoop/journal && mkdir /home/hadoop/journal/data
+RUN mkdir -p /mnt/hadoop/dfs/name && mkdir -p /mnt/hadoop/dfs/data && mkdir -p /mnt/hadoop/journal/data
 
 ADD core-site.xml.template /usr/local/hadoop/etc/hadoop/core-site.xml.template
 ADD hdfs-site.xml.template /usr/local/hadoop/etc/hadoop/hdfs-site.xml.template

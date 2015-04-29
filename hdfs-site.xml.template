@@ -1,12 +1,12 @@
 <configuration>
     <property>
         <name>dfs.datanode.data.dir</name>
-        <value>file:///home/hadoop/dfs/data</value>
+        <value>file:///mnt/hadoop/dfs/data</value>
         <description>Comma separated list of paths on the local filesystem of a DataNode where it should store its blocks.</description>
     </property>
     <property>
         <name>dfs.namenode.name.dir</name>
-        <value>file:///home/hadoop/dfs/name</value>
+        <value>file:///mnt/hadoop/dfs/name</value>
         <description>Path on the local filesystem where the NameNode stores the namespace and transaction logs persistently.</description>
     </property>
     <property>
@@ -47,6 +47,6 @@
     </property>
     <property>
       <name>dfs.journalnode.edits.dir</name>
-      <value>/home/hadoop/journal/data</value>
+      <value>/mnt/hadoop/journal/data</value>
     </property>
 </configuration>
