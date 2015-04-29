@@ -44,6 +44,14 @@ if [ -z $NNODE1_IP ] || [ -z $NNODE2_IP ] || [ -z $JN_IPS ]; then
   exit;
 fi
 
+if [[ $NNODE1_IP = "localhost" ]]; then
+  NNODE1_IP=$HOSTNAME
+fi
+
+if [[ $NNODE2_IP = "localhost" ]]; then
+  NNODE2_IP=$HOSTNAME
+fi
+
 arr=$(echo $JN_IPS | tr "," "\n")
 JNODES=""
 for x in $arr
