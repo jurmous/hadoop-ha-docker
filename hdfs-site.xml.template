@@ -10,6 +10,14 @@
         <description>Path on the local filesystem where the NameNode stores the namespace and transaction logs persistently.</description>
     </property>
     <property>
+        <name>dfs.ha.automatic-failover.enabled</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>ha.zookeeper.quorum</name>
+        <value>ZKNODES</value>
+    </property>
+    <property>
       <name>dfs.nameservices</name>
       <value>CLUSTER_NAME</value>
     </property>
