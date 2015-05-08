@@ -2,7 +2,7 @@ jurmous/hadoop is Hadoop distributed storage engine packaged in lightweight dock
 
 # Package details
 * Java 7 (The latest from java:7 as base container)
-* Hadoop 2.5.1
+* Hadoop 2.5.2
 * Bash
 * No extra packaged OS to be lighter.
 
